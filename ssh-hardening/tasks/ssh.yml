@@ -1,0 +1,38 @@
+---
+ - name: Set file permissions on /home/osiuser/.ssh/authorized_keys
+   file:
+     path: /home/osiuser/.ssh/authorized_keys
+     owner: root
+     mode: 0400
+ - name: Set file permissions on /home/deploy/.ssh/authorized_keys
+   file:
+     path: /home/osiuser/.ssh/authorized_keys
+     owner: root
+     mode: 0400
+
+ - name: Disable root login via password
+   lineinfile:
+     path: /etc/ssh/sshd_config
+     state: present
+     regexp: "^PermitRootLogin"
+     line: "PermitRootLogin prohibit-password"
+
+ - name: Enable PasswordAuthentication
+   lineinfile:
+     path: /etc/ssh/sshd_config
+     state: present
+     regexp: "^PasswordAuthentication"
+     line: "PasswordAuthentication yes"
+
+ - name: Enable ufw access for OpenSSH
+   ufw:
+     rule: allow
+     name: OpenSSH
+
+   notify: Restart sshd
+  #  - name: Setup alternate SSH port
+  #   lineinfile:
+  #     dest: "/etc/ssh/sshd_config"
+  #     regexp: "^Port"
+  #      line: "Port 2225"
+

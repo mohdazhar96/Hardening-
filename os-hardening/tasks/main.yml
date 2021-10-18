@@ -1,0 +1,16 @@
+---
+# tasks file for os-hardenin
+ - name: Update cache
+   apt:
+     update_cache: yes
+
+ - name: Upgrade all packages on servers
+   apt:
+     name: "*"
+     state: latest
+     
+ - name: install fail2ban package
+   apt: pkg=fail2ban state=present
+
+   notify: Start fail2ban
+
